@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.BoringLayout;
 import android.util.Log;
 import android.widget.ListAdapter;
 import android.widget.SimpleAdapter;
