@@ -1,8 +1,8 @@
 package com.example.mau.newcalender;
 
-
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,7 +34,7 @@ public class MainActivity extends ListActivity {
 
     private ArrayList<HashMap<String, String>> scheduleList;
     private ProgressDialog pDialog;
-    private String url = "https://nodejs-calender-prashantdawar.c9.io/schedule.json";
+    public  String url = "https://nodejs-calender-prashantdawar.c9.io/";
     private JSONArray scheduleJSONArray;
 
 
@@ -42,28 +42,42 @@ public class MainActivity extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent intent = getIntent();
+        url = url + intent.getStringExtra("group");
+        Log.i("url: " , url);
 
         scheduleList = new ArrayList<>();
 
         dataSource = new ScheduleDataSource(this);
 
-        //open database for r/w
-        try {
-            dataSource.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
 
         //detecting connection
         cd = new ConnectionDetector(this);
         isInternetPresent = cd.isConnectingToInternet();
         if (isInternetPresent) {
+
+            //open database for r/w
+            try {
+                dataSource.openWrite();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             new GetSchedule().execute();
         } else {
+            //open database for r/w
+            try {
+                dataSource.open();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             showFullSchedule();
         }
 
+
+
     }
+
 
     private void showFullSchedule() {
         Cursor data = dataSource.fullSchedule();
@@ -151,4 +165,6 @@ public class MainActivity extends ListActivity {
             showFullSchedule();
         }
     }
+
+
 }

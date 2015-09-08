@@ -27,6 +27,11 @@ public class ScheduleDataSource {
     public void open() throws SQLException{
         database = dbHelper.getWritableDatabase();
     }
+    public void openWrite() throws  SQLException{
+        database = dbHelper.getWritableDatabase();
+        database.execSQL("DELETE from " + MySQLiteHelper.TABLE_SCHEDULE);
+
+    }
 
     public void close(){
         dbHelper.close();
